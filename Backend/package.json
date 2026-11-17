@@ -23,6 +23,7 @@
     "nodemon": "^3.1.14",
     "openai": "^7.32.0",
     "pdf-parse": "^2.4.5",
+    "puppeteer": "^25.17.0",
     "zod": "^4.6.6",
     "zod-to-json-schema": "^3.25.2"
   }

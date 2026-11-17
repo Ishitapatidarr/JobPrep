@@ -1,6 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
+const interviewRouter = require("./routes/interview.routes");
 
 /*require all the routes here*/
 const authRouter = require("./routes/auth.routes");
@@ -14,9 +15,7 @@ app.use(cors({
     credentials: true
 }))
 
-/* require all the routes here */
-const authRouter = require("./routes/auth.routes")
-const interviewRouter = require("./routes/interview.routes")
+
 
 
 /* using all the routes here*/ 
