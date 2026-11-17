@@ -1,0 +1,97 @@
+// Matches the dark theme + #e1034d accent used across the app
+.logout {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    &__button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.55rem;
+        width: 100%;
+        padding: 0.7rem 1.1rem;
+        border: 1px solid #3a3a3a;
+        border-radius: 1rem;
+        background: transparent;
+        color: #a3a3a3;
+        font: inherit;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+
+        &:hover:not(:disabled) {
+            color: #e1034d;
+            border-color: rgba(225, 3, 77, 0.5);
+            background: rgba(225, 3, 77, 0.08);
+        }
+
+        &:focus-visible {
+            outline: 2px solid #e1034d;
+            outline-offset: 2px;
+        }
+
+        &:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+    }
+
+    &__error {
+        padding: 0.55rem 0.75rem;
+        border-radius: 0.75rem;
+        background: rgba(225, 3, 77, 0.12);
+        border: 1px solid rgba(225, 3, 77, 0.35);
+        color: #ff7a96;
+        font-size: 0.8rem;
+        line-height: 1.45;
+    }
+
+    // Compact pill variant used inside the Home page user chip
+    &--inline {
+        position: relative;
+        flex-shrink: 0;
+
+        .logout__button {
+            width: auto;
+            gap: 0.45rem;
+            padding: 0.45rem 0.9rem;
+            border-color: transparent;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #d4d4d4;
+            font-size: 0.82rem;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
+
+            svg {
+                transition: transform 0.2s ease;
+            }
+
+            &:hover:not(:disabled) {
+                color: #e1034d;
+                border-color: rgba(225, 3, 77, 0.35);
+                background: rgba(225, 3, 77, 0.12);
+
+                svg { transform: translateX(2px); }
+            }
+
+            &:active:not(:disabled) {
+                transform: scale(0.96);
+            }
+        }
+
+        // Float the error below the chip so it doesn't break the pill layout
+        .logout__error {
+            position: absolute;
+            top: calc(100% + 0.6rem);
+            right: 0;
+            z-index: 5;
+            width: max-content;
+            max-width: min(300px, 80vw);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+        }
+    }
+}

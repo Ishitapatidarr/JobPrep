@@ -49,16 +49,24 @@ export const useAuth = () => {
         }
     }
 
+    /**
+     * Logs out via the backend (blacklists the JWT and clears the cookie), then clears auth state.
+     * Doesn't toggle the global `loading` flag, so the current page (and any error message) stays mounted.
+     * Throws an Error with a user-friendly message if the logout could not be completed.
+     */
     const handleLogout = async () => {
-        setLoading(true)
         try {
-            const data = await logout()
-            setUser(null)
+            await logout()
         } catch (err) {
-
-        } finally {
-            setLoading(false)
+            // 401 = the session had already expired / been invalidated, so the user is effectively logged out
+            if (err?.response?.status !== 401) {
+                const message = err?.response
+                    ? (err.response.data?.message || "Logout failed. Please try again.")
+                    : "Cannot reach the server. Please check your connection and try again."
+                throw new Error(message, { cause: err })
+            }
         }
+        setUser(null)
     }
 
     useEffect(() => {

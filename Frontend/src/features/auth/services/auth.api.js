@@ -40,15 +40,11 @@ export async function login({ email, password }) {
 }
 
 export async function logout() {
-    try {
+    // The JWT lives in the "token" cookie; withCredentials sends it so the backend can
+    // blacklist it and clear the cookie. Errors are re-thrown so the UI can report them.
+    const response = await api.get("/api/auth/logout")
 
-        const response = await api.get("/api/auth/logout")
-
-        return response.data
-
-    } catch (err) {
-
-    }
+    return response.data
 }
 
 export async function getMe() {

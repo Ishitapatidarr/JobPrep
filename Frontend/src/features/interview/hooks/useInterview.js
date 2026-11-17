@@ -1,4 +1,4 @@
-import { getAllInterviewReports, generateInterviewReport, getInterviewReportById, generateResumePdf } from "../services/interview.api"
+import { getAllInterviewReports, generateInterviewReport, getInterviewReportById, generateResumePdf, getApiErrorMessage } from "../services/interview.api"
 import { useContext, useEffect } from "react"
 import { InterviewContext } from "../interview.context"
 import { useParams } from "react-router"
@@ -13,68 +13,90 @@ export const useInterview = () => {
         throw new Error("useInterview must be used within an InterviewProvider")
     }
 
-    const { loading, setLoading, report, setReport, reports, setReports } = context
+    const {
+        loading, setLoading, report, setReport, reports, setReports,
+        reportsLoading, setReportsLoading, reportError, setReportError, reportsError, setReportsError
+    } = context
 
+    /**
+     * Generates a new plan. Throws an Error with a user-friendly message on failure,
+     * so the caller can show it and avoid navigating.
+     */
     const generateReport = async ({ jobDescription, selfDescription, resumeFile }) => {
         setLoading(true)
-        let response = null
         try {
-            response = await generateInterviewReport({ jobDescription, selfDescription, resumeFile })
-            setReport(response.interviewReport)
+            const response = await generateInterviewReport({ jobDescription, selfDescription, resumeFile })
+            const newReport = response?.interviewReport
+            if (!newReport?._id) {
+                throw new Error("The server returned an empty interview plan. Please try again.")
+            }
+            setReport(newReport)
+            // Put the new plan at the top of the recent list straight away
+            setReports(prev => [ newReport, ...prev.filter(r => r._id !== newReport._id) ])
+            return newReport
         } catch (error) {
             console.log(error)
+            const message = error?.isAxiosError
+                ? await getApiErrorMessage(error, "Could not generate your interview plan. Please try again.")
+                : error.message
+            throw new Error(message, { cause: error })
         } finally {
             setLoading(false)
         }
-
-        return response.interviewReport
     }
 
     const getReportById = async (interviewId) => {
         setLoading(true)
-        let response = null
+        setReportError("")
         try {
-            response = await getInterviewReportById(interviewId)
+            const response = await getInterviewReportById(interviewId)
             setReport(response.interviewReport)
+            return response.interviewReport
         } catch (error) {
             console.log(error)
+            setReport(null)
+            setReportError(await getApiErrorMessage(error, "Could not load this interview plan."))
+            return null
         } finally {
             setLoading(false)
         }
-        return response.interviewReport
     }
 
     const getReports = async () => {
-        setLoading(true)
-        let response = null
+        setReportsLoading(true)
+        setReportsError("")
         try {
-            response = await getAllInterviewReports()
+            const response = await getAllInterviewReports()
             setReports(response.interviewReports)
+            return response.interviewReports
         } catch (error) {
             console.log(error)
+            setReportsError(await getApiErrorMessage(error, "Could not load your recent interview plans."))
+            return []
         } finally {
-            setLoading(false)
+            setReportsLoading(false)
         }
-
-        return response.interviewReports
     }
 
+    /**
+     * Downloads the generated resume PDF. Throws an Error with a user-friendly message on failure.
+     * Uses its own loading flag in the caller so the results page stays on screen.
+     */
     const getResumePdf = async (interviewReportId) => {
-        setLoading(true)
-        let response = null
         try {
-            response = await generateResumePdf({ interviewReportId })
+            const response = await generateResumePdf({ interviewReportId })
             const url = window.URL.createObjectURL(new Blob([ response ], { type: "application/pdf" }))
             const link = document.createElement("a")
             link.href = url
             link.setAttribute("download", `resume_${interviewReportId}.pdf`)
             document.body.appendChild(link)
             link.click()
+            link.remove()
+            window.URL.revokeObjectURL(url)
         }
         catch (error) {
             console.log(error)
-        } finally {
-            setLoading(false)
+            throw new Error(await getApiErrorMessage(error, "Could not generate your resume PDF. Please try again."), { cause: error })
         }
     }
 
@@ -86,6 +108,9 @@ export const useInterview = () => {
         }
     }, [ interviewId ])
 
-    return { loading, report, reports, generateReport, getReportById, getReports, getResumePdf }
+    return {
+        loading, report, reports, reportsLoading, reportError, reportsError,
+        generateReport, getReportById, getReports, getResumePdf
+    }
 
 }

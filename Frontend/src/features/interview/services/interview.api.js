@@ -13,17 +13,42 @@ export const generateInterviewReport = async ({ jobDescription, selfDescription,
 
     const formData = new FormData()
     formData.append("jobDescription", jobDescription)
-    formData.append("selfDescription", selfDescription)
-    formData.append("resume", resumeFile)
+    formData.append("selfDescription", selfDescription || "")
+    // Only attach the file when one was chosen; appending undefined sends the string "undefined"
+    if (resumeFile) {
+        formData.append("resume", resumeFile)
+    }
 
-    const response = await api.post("/api/interview/", formData, {
-        headers: {
-            "Content-Type": "multipart/form-data"
-        }
-    })
+    const response = await api.post("/api/interview/", formData)
 
     return response.data
 
+}
+
+
+/**
+ * @description Turn an axios error into a user-friendly message.
+ * Handles JSON error bodies, Blob error bodies (PDF download), network errors and expired sessions.
+ */
+export const getApiErrorMessage = async (error, fallback = "Something went wrong. Please try again.") => {
+    if (!error?.response) {
+        return "Cannot reach the server. Please check that the backend is running and try again."
+    }
+
+    if (error.response.status === 401) {
+        return "Your session has expired. Please log in again."
+    }
+
+    let data = error.response.data
+    if (data instanceof Blob) {
+        try {
+            data = JSON.parse(await data.text())
+        } catch {
+            data = null
+        }
+    }
+
+    return data?.message || fallback
 }
 
 

@@ -44,6 +44,41 @@ const skillGapSchema = new mongoose.Schema({
         type: String,
         enum: [ "low", "medium", "high" ],
         required: [ true, "Severity is required" ]
+    },
+    // "missing" or "partial" (insufficiently demonstrated)
+    status: {
+        type: String,
+        enum: [ "missing", "partial" ]
+    },
+    // Why the job needs this skill
+    description: {
+        type: String
+    },
+    // Learning recommendations
+    topics: [ { type: String } ],
+    focusAreas: [ { type: String } ]
+}, {
+    _id: false
+})
+
+// Every JD requirement and how the candidate matched it (basis for matchScore)
+const skillAnalysisSchema = new mongoose.Schema({
+    skill: {
+        type: String,
+        required: [ true, "Skill is required" ]
+    },
+    importance: {
+        type: String,
+        enum: [ "required", "preferred", "nice-to-have" ],
+        required: true
+    },
+    status: {
+        type: String,
+        enum: [ "matched", "partial", "missing" ],
+        required: true
+    },
+    evidence: {
+        type: String
     }
 }, {
     _id: false
@@ -83,6 +118,15 @@ const interviewReportSchema = new mongoose.Schema({
     technicalQuestions: [ technicalQuestionSchema ],
     behavioralQuestions: [ behavioralQuestionSchema ],
     skillGaps: [ skillGapSchema ],
+    skillAnalysis: [ skillAnalysisSchema ],
+    experienceMatch: {
+        type: String,
+        enum: [ "meets", "partial", "below" ]
+    },
+    experienceNote: {
+        type: String
+    },
+    // Legacy: day-by-day plans from older reports (no longer generated)
     preparationPlan: [ preparationPlanSchema ],
     user: {
         type: mongoose.Schema.Types.ObjectId,
