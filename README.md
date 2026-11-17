@@ -259,6 +259,9 @@ AI-generated Interview plan
 ATS friendly resume according to targeted Job Description
  <img width="1295" height="961" alt="image" src="https://github.com/user-attachments/assets/eb16766b-37fd-4a84-93a5-35a320b91f23" />
 
+MongoDB collections
+<img width="1917" height="1018" alt="image" src="https://github.com/user-attachments/assets/df48ee36-9849-4fa7-a7f9-d2572c207dc0" />
+
 
 
 
