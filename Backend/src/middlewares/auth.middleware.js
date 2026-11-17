@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken")
-require("dotenv").config()
+require("../config/env") // loads Backend/.env (once)
 const tokenBlacklistModel = require("../models/blacklist.model")
 
 

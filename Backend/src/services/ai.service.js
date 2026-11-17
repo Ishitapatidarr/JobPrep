@@ -3,16 +3,32 @@ const { z } = require("zod");
 const path = require("path");
 const puppeteer = require("puppeteer")
 
-require("dotenv").config({
-    path: path.resolve(__dirname, "../../.env")
-});
+require("../config/env"); // loads Backend/.env (once)
 
-const client = new OpenAI({
-    apiKey: process.env.NVIDIA_API_KEY,
-    baseURL: "https://integrate.api.nvidia.com/v1",
-    timeout: 180000, // 180 seconds (20 questions + skill analysis is a long response)
-    maxRetries: 2
-});
+/**
+ * The OpenAI SDK is used with NVIDIA's OpenAI-compatible API (key: NVIDIA_API_KEY).
+ * The client is created lazily on first use: creating it at module load crashes the
+ * whole server when the key is missing, even though only the AI features need it.
+ */
+const AI_NOT_CONFIGURED = "AI_NOT_CONFIGURED";
+let client = null;
+
+function getClient() {
+    if (!process.env.NVIDIA_API_KEY) {
+        const error = new Error("NVIDIA_API_KEY is missing from Backend/.env — AI features are unavailable.");
+        error.code = AI_NOT_CONFIGURED;
+        throw error;
+    }
+    if (!client) {
+        client = new OpenAI({
+            apiKey: process.env.NVIDIA_API_KEY,
+            baseURL: "https://integrate.api.nvidia.com/v1",
+            timeout: 180000, // 180 seconds (20 questions + skill analysis is a long response)
+            maxRetries: 2
+        });
+    }
+    return client;
+}
 
 const MODEL = "nvidia/nemotron-3.5-lightning-30b-a3b";
 const TECHNICAL_QUESTION_COUNT = 10;
@@ -94,7 +110,7 @@ async function ensureQuestionCount({ questions, type, target, resume, selfDescri
         const missing = target - result.length;
         console.log(`Topping up ${type} questions: need ${missing} more (attempt ${attempt}/3)...`);
 
-        const response = await client.chat.completions.create({
+        const response = await getClient().chat.completions.create({
             model: MODEL,
             messages: [
                 {
@@ -215,9 +231,8 @@ async function generateInterviewReport({
     jobDescription
 }) {
     try {
-        if (!process.env.NVIDIA_API_KEY) {
-            throw new Error("NVIDIA_API_KEY is missing from Backend/.env");
-        }
+        // Fails fast with a clear AI_NOT_CONFIGURED error when NVIDIA_API_KEY is missing
+        getClient();
 
         const prompt = `
 Analyse how well this candidate fits the job, then prepare interview questions.
@@ -295,7 +310,7 @@ Return valid JSON only, without Markdown fences.
                 `Generating interview report (attempt ${attempt}/${maxAttempts})...`
             );
 
-            const response = await client.chat.completions.create({
+            const response = await getClient().chat.completions.create({
                 model: MODEL,
 
                 messages: [
@@ -739,7 +754,7 @@ Return ONLY one valid JSON object with exactly this structure:
 }
 No Markdown fences, no explanations, no extra properties.`;
 
-    const response = await client.chat.completions.create({
+    const response = await getClient().chat.completions.create({
         model: MODEL,
         messages: [
             {

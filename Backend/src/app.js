@@ -1,5 +1,5 @@
 const express = require("express");
-require("dotenv").config();
+require("./config/env"); // loads Backend/.env (once)
 const cookieParser = require("cookie-parser");
 const interviewRouter = require("./routes/interview.routes");
 

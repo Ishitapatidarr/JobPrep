@@ -4,6 +4,8 @@ const { z } = require("zod")
 const { generateInterviewReport, generateResumePdf } = require("../services/ai.service")
 const interviewReportModel = require("../models/interviewReport.model")
 
+const AI_NOT_CONFIGURED_MESSAGE = "AI features are not configured on the server (NVIDIA_API_KEY is missing). Please contact the administrator."
+
 
 /**
  * @description Request validation for generating a report.
@@ -66,6 +68,9 @@ async function generateInterViewReportController(req, res) {
         })
     } catch (err) {
         console.error("AI generation failed:", err.message)
+        if (err.code === "AI_NOT_CONFIGURED") {
+            return res.status(503).json({ message: AI_NOT_CONFIGURED_MESSAGE })
+        }
         return res.status(502).json({
             message: "The AI service could not generate your interview plan. Please try again in a moment."
         })
@@ -162,6 +167,9 @@ async function generateResumePdfController(req, res) {
         pdfBuffer = await generateResumePdf({ resume, jobDescription, selfDescription })
     } catch (err) {
         console.error("Resume PDF generation failed:", err.message)
+        if (err.code === "AI_NOT_CONFIGURED") {
+            return res.status(503).json({ message: AI_NOT_CONFIGURED_MESSAGE })
+        }
         return res.status(502).json({
             message: "Could not generate your resume PDF. Please try again in a moment."
         })
