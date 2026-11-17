@@ -1,6 +1,6 @@
 # JobPrep
 
-**AI-powered interview preparation platform** — paste a job description, add your resume or a short self-description, and JobPrep compares your profile with the role to produce a match score, your missing skills with learning recommendations, 10 technical and 10 behavioral interview questions with model answers, and a tailored ATS-friendly resume PDF.
+**AI-powered interview preparation platform** — paste a job description, add your resume or a short self-description, and JobPrep compares your profile with the role to produce a match score, your missing skills with learning recommendations, technical and behavioral interview questions with model answers, and a tailored ATS-friendly resume PDF.
 
 ---
 
