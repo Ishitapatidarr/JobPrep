@@ -18,9 +18,7 @@
 - [API Overview](#api-overview)
 - [Authentication and Application Workflow](#authentication-and-application-workflow)
 - [Screenshots](#screenshots)
-- [Future Improvements](#future-improvements)
-- [Contributing](#contributing)
-- [License](#license)
+
 
 ---
 
@@ -237,40 +235,24 @@ Errors are returned as JSON, e.g. `{ "message": "Job description is required." }
 
 ## Screenshots
 
-> Screenshots are not included yet. Add images to a `docs/screenshots/` folder and update the paths below.
+Login
+<img width="1917" height="948" alt="image" src="https://github.com/user-attachments/assets/fec3b145-6dfd-4aa7-9108-49ce56e3b73b" />
 
-| Page | Screenshot |
-|---|---|
-| Login | `docs/screenshots/login.png` |
-| Home — create interview plan | `docs/screenshots/home.png` |
-| Results — questions | `docs/screenshots/interview-questions.png` |
-| Results — Road Map (missing skills) | `docs/screenshots/roadmap.png` |
-| Generated resume PDF | `docs/screenshots/resume-pdf.png` |
+Register
+<img width="1917" height="955" alt="image" src="https://github.com/user-attachments/assets/a5ea7056-e2ac-457c-9dd2-2568c53db962" />
 
-## Future Improvements
+Homepage
+<img width="1067" height="906" alt="image" src="https://github.com/user-attachments/assets/a0e46b07-2dab-4859-9998-380679caf176" />
 
-- Support **DOCX** resumes (currently PDF only).
-- Extract **hyperlink URLs** (LinkedIn, GitHub, …) from uploaded PDFs so they appear in the generated resume.
-- Move the port, CORS origin and API base URL into environment variables for easier deployment.
-- Add automated **tests** for the API and frontend (none exist yet).
-- Add a TTL index so blacklisted tokens are removed automatically after they expire.
-- Rate limiting and stricter cookie settings (`httpOnly`, `secure`, `sameSite`) for production.
-- Delete or edit saved interview plans.
-- Remove `Backend/node_modules` from version control (it is currently committed; dependencies should be installed with `npm install`).
-- Deployment guide (e.g. Render / Vercel / MongoDB Atlas).
+AI-generated Interview plan
+<img width="1287" height="901" alt="image" src="https://github.com/user-attachments/assets/424fe5d3-c47e-4cba-889d-a252d41f6d28" />
 
-## Contributing
 
-Contributions are welcome!
 
-1. Fork the repository and create a branch: `git checkout -b feature/your-feature`.
-2. Make your changes, keeping to the existing structure (`features/` folders on the frontend; routes → controllers → services on the backend).
-3. Run `npm run lint` in `Frontend` and test the full flow locally (backend + frontend).
-4. **Never commit secrets** — keep credentials in `Backend/.env` only.
-5. Commit with a clear message and open a pull request describing what changed and why.
+<img width="1282" height="906" alt="image" src="https://github.com/user-attachments/assets/0cac96a8-7059-4825-9578-ffbea466b3fb" />
+<img width="1285" height="907" alt="image" src="https://github.com/user-attachments/assets/6c323084-a865-463a-a195-8d0afbdcd03f" />
+ <img width="1295" height="961" alt="image" src="https://github.com/user-attachments/assets/eb16766b-37fd-4a84-93a5-35a320b91f23" />
 
-For bugs or ideas, please open an issue.
 
-## License
 
-No license has been added to this repository yet, so all rights are reserved by the author by default. If you'd like to use or redistribute this code, please contact the repository owner. (To make it open source, add a `LICENSE` file — e.g. MIT — to the project root.)
+
