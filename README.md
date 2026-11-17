@@ -244,13 +244,16 @@ Register
 Homepage
 <img width="1067" height="906" alt="image" src="https://github.com/user-attachments/assets/a0e46b07-2dab-4859-9998-380679caf176" />
 
+<img width="1035" height="901" alt="image" src="https://github.com/user-attachments/assets/a864c087-34d7-4f47-a10d-9416376bbad6" />
+<img width="1910" height="966" alt="image" src="https://github.com/user-attachments/assets/54dea5fa-6fe2-4090-a067-d061209329ca" />
+
+
 AI-generated Interview plan
 <img width="1287" height="901" alt="image" src="https://github.com/user-attachments/assets/424fe5d3-c47e-4cba-889d-a252d41f6d28" />
-
-
-
 <img width="1282" height="906" alt="image" src="https://github.com/user-attachments/assets/0cac96a8-7059-4825-9578-ffbea466b3fb" />
 <img width="1285" height="907" alt="image" src="https://github.com/user-attachments/assets/6c323084-a865-463a-a195-8d0afbdcd03f" />
+
+ATS friendly resume according to targeted Job Description
  <img width="1295" height="961" alt="image" src="https://github.com/user-attachments/assets/eb16766b-37fd-4a84-93a5-35a320b91f23" />
 
 
