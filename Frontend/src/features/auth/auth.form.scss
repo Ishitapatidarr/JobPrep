@@ -41,6 +41,16 @@ main{
         color: #e1034d;
         text-decoration: none;
     }
+
+    .form-message--error{
+        padding: 0.65rem 0.9rem;
+        border-radius: 0.75rem;
+        background: rgba(225, 3, 77, 0.12);
+        border: 1px solid rgba(225, 3, 77, 0.35);
+        color: #ff7a96;
+        font-size: 0.88rem;
+        line-height: 1.45;
+    }
 }
 
 .loading-page {

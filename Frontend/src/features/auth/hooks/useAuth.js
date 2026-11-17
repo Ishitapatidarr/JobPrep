@@ -26,12 +26,21 @@ export const useAuth = () => {
     setLoading(true)
 
     try {
-        const data = await login({ email, password })
+        const data = await login({ email: email.trim(), password })
+        if (!data?.user) {
+            throw new Error("Unexpected response from the server. Please try again.")
+        }
         setUser(data.user)
         return data
     } catch (err) {
         console.error("Login error:", err)
-        throw err
+        // Never read err.response.* unless a response actually exists (network errors have none)
+        const message = err?.response
+            ? (err.response.data?.message || "Login failed. Please try again.")
+            : err?.isAxiosError
+                ? "Cannot reach the server. Please check your connection and try again."
+                : (err?.message || "Login failed. Please try again.")
+        throw new Error(message, { cause: err })
     } finally {
         setLoading(false)
     }
@@ -40,10 +49,21 @@ export const useAuth = () => {
     const handleRegister = async ({ username, email, password }) => {
         setLoading(true)
         try {
-            const data = await register({ username, email, password })
+            const data = await register({ username: username.trim(), email: email.trim(), password })
+            if (!data?.user) {
+                throw new Error("Unexpected response from the server. Please try again.")
+            }
             setUser(data.user)
+            return data
         } catch (err) {
-
+            console.error("Register error:", err)
+            // Never read err.response.* unless a response actually exists (network errors have none)
+            const message = err?.response
+                ? (err.response.data?.message || "Registration failed. Please try again.")
+                : err?.isAxiosError
+                    ? "Cannot reach the server. Please check your connection and try again."
+                    : (err?.message || "Registration failed. Please try again.")
+            throw new Error(message, { cause: err })
         } finally {
             setLoading(false)
         }

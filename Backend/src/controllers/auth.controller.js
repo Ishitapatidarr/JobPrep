@@ -12,7 +12,10 @@ require("dotenv").config()
  */
 async function registerUserController(req, res) {
 
-    const { username, email, password } = req.body
+    const { password } = req.body ?? {}
+    const username = typeof req.body?.username === "string" ? req.body.username.trim() : ""
+    // Store emails lowercase so login (which lowercases the typed email) always matches
+    const email = typeof req.body?.email === "string" ? req.body.email.trim().toLowerCase() : ""
 
     if (!username || !email || !password) {
         return res.status(400).json({
@@ -74,7 +77,15 @@ async function registerUserController(req, res) {
  */
 async function loginUserController(req, res) {
 
-    const { email, password } = req.body
+    const { password } = req.body ?? {}
+    // Emails are stored lowercase; normalise so "Name@Mail.com " still matches
+    const email = typeof req.body?.email === "string" ? req.body.email.trim().toLowerCase() : ""
+
+    if (!email || !password) {
+        return res.status(400).json({
+            message: "Please provide email and password"
+        })
+    }
 
     const user = await userModel.findOne({ email })
 
