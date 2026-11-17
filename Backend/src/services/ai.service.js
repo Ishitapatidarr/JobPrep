@@ -438,7 +438,7 @@ function countPdfPages(pdfBuffer) {
  * until it fits on one page; if it still doesn't fit, the readable multi-page version is kept.
  */
 async function generatePdfFromHtml(htmlContent, { fitToOnePage = false, minScale = 0.8 } = {}) {
-    const browser = await puppeteer.launch()
+    const browser = await puppeteer.launch({ args: [ "--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage" ] })
     try {
         const page = await browser.newPage();
         await page.setContent(htmlContent, { waitUntil: "networkidle0" })
@@ -1031,7 +1031,7 @@ module.exports = {
 // }
 
 // async function generatePdfFromHtml(htmlContent) {
-//     const browser = await puppeteer.launch()
+//     const browser = await puppeteer.launch({ args: [ "--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage" ] })
 //     const page = await browser.newPage();
 //     await page.setContent(htmlContent, { waitUntil: "networkidle0" })
 

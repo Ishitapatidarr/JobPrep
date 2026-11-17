@@ -1,7 +1,7 @@
 // Load Backend/.env first, before any module that reads process.env
 const { ENV_PATH, ENV_VARS, envFileExists, getMissingEnv } = require("./src/config/env");
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Startup configuration check — never prints values, only which names are missing
 const missing = getMissingEnv();

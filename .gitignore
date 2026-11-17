@@ -6,3 +6,8 @@
 
 # Dependencies
 node_modules/
+# Puppeteer Chrome download
+.cache/
+
+# Build output
+dist/

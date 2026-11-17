@@ -1,0 +1,23 @@
+# Render Blueprint — one web service: Express API + built React frontend (same origin)
+services:
+  - type: web
+    name: jobprep
+    runtime: node
+    plan: free
+    region: oregon
+    branch: main
+    buildCommand: cd Frontend && npm ci && npm run build && cd ../Backend && npm ci
+    startCommand: cd Backend && node server.js
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22.12.0"
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: MONGO_URI
+        sync: false
+      - key: NVIDIA_API_KEY
+        sync: false
