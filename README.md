@@ -4,8 +4,9 @@
 
 Live Demo: https://jobprep-frontend.onrender.com
 
-**Demo Video Link:**
-https://drive.google.com/file/d/1zF6PQABmU0hKEdo9EMxhEIhj_YpGAG6w/view?usp=sharing
+Demo Video Link: https://drive.google.com/file/d/1zF6PQABmU0hKEdo9EMxhEIhj_YpGAG6w/view?usp=sharing
+
+
 ---
 
 ## Table of Contents
