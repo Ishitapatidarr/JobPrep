@@ -2,6 +2,7 @@
 
 **AI-powered interview preparation platform** — paste a job description, add your resume or a short self-description, and JobPrep compares your profile with the role to produce a match score, your missing skills with learning recommendations, technical and behavioral interview questions with model answers, and a tailored ATS-friendly resume PDF.
 
+Live Demo: https://jobprep-frontend.onrender.com
 
 **Demo Video Link:**
 https://drive.google.com/file/d/1zF6PQABmU0hKEdo9EMxhEIhj_YpGAG6w/view?usp=sharing
