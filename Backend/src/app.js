@@ -16,11 +16,28 @@ app.use(cookieParser());
 
 // Local dev: Vite on :5173 calls the API cross-origin. In production the frontend is
 // served by this same app, so no CORS is needed. Extra origins: CORS_ORIGIN (comma-separated).
-const allowedOrigins = [ "http://localhost:5173", ...(process.env.CORS_ORIGIN || "").split(",").map(s => s.trim()).filter(Boolean) ]
+const allowedOrigins = [
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "https://jobprep-frontend.onrender.com",
+    ...(process.env.CORS_ORIGIN || "")
+        .split(",")
+        .map(origin => origin.trim().replace(/\/$/, ""))
+        .filter(Boolean)
+];
+
 app.use(cors({
-    origin: allowedOrigins,
-    credentials: true
-}))
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+
+        return callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 app.get("/healthz", (req, res) => res.json({ status: "ok" }));
 

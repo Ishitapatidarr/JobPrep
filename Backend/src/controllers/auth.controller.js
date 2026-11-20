@@ -4,7 +4,13 @@ const jwt = require("jsonwebtoken")
 const tokenBlacklistModel = require("../models/blacklist.model")
 require("../config/env") // loads Backend/.env (once)
 
-
+const cookieOptions = {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    path: "/",
+    maxAge: 24 * 60 * 60 * 1000
+};
 /**
  * @name registerUserController
  * @description register a new user, expects username, email and password in the request body
@@ -54,8 +60,8 @@ async function registerUserController(req, res) {
         process.env.JWT_SECRET,
         { expiresIn: "1d" }
     );
-
-    res.cookie("token", token)
+    
+    res.cookie("token", token, cookieOptions);
 
 
     res.status(201).json({
@@ -109,7 +115,7 @@ async function loginUserController(req, res) {
         { expiresIn: "1d" }
     );
 
-    res.cookie("token", token)
+    res.cookie("token", token, cookieOptions);
     res.status(200).json({
         message: "User loggedIn successfully.",
         user: {
@@ -127,13 +133,18 @@ async function loginUserController(req, res) {
  * @access public
  */
 async function logoutUserController(req, res) {
-    const token = req.cookies.token
+    const token = req.cookies?.token;
 
     if (token) {
         await tokenBlacklistModel.create({ token })
     }
 
-    res.clearCookie("token")
+       res.clearCookie("token", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        path: "/"
+    });
 
     res.status(200).json({
         message: "User logged out successfully"
